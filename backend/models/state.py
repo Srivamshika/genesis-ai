@@ -2,13 +2,13 @@ from pydantic import BaseModel
 from typing import Optional
 
 from models.research import ResearchReport
-
+from models.product import ProductSpecification
 
 class GenesisState(BaseModel):
     idea: str
 
     research: Optional[ResearchReport] = None
-    product: Optional[dict] = None
+    product: ProductSpecification | None = None
 
     architecture: Optional[dict] = None
 

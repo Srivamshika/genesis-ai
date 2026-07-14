@@ -32,3 +32,6 @@ class GenesisKernel:
     def set_research(self, report):
 
         self.state.research = report
+    def set_product(self, product):
+
+        self.state.product = product

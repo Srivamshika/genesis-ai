@@ -127,115 +127,398 @@
 //   );
 // }
 
+// "use client";
+
+// import { useState } from "react";
+
+// interface GenesisResponse {
+//   idea: string;
+//   research: unknown | null;
+//   product: unknown | null;
+//   architecture: unknown | null;
+//   code: unknown | null;
+//   qa: unknown | null;
+//   deployment: unknown | null;
+// }
+
+// export default function Home() {
+//   const [idea, setIdea] = useState("");
+//   const [response, setResponse] = useState<GenesisResponse | null>(null);
+
+//   async function generateIdea() {
+//     try {
+//       const res = await fetch("http://127.0.0.1:8000/generate", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           idea,
+//         }),
+//       });
+
+//       const data: GenesisResponse = await res.json();
+//       setResponse(data);
+//     } catch (error) {
+//       console.error("Error:", error);
+//     }
+//   }
+
+//   return (
+//     <main style={{ padding: "40px", fontFamily: "Arial, sans-serif" }}>
+//       <h1>Genesis AI</h1>
+
+//       <input
+//         value={idea}
+//         onChange={(e) => setIdea(e.target.value)}
+//         placeholder="Enter startup idea"
+//         style={{
+//           padding: "10px",
+//           width: "350px",
+//           marginRight: "10px",
+//         }}
+//       />
+
+//       <button
+//         onClick={generateIdea}
+//         style={{
+//           padding: "10px 20px",
+//           cursor: "pointer",
+//         }}
+//       >
+//         Generate
+//       </button>
+
+//       <hr style={{ margin: "30px 0" }} />
+
+//       <h2>Genesis AI Organization</h2>
+
+//       <div
+//         style={{
+//           border: "1px solid #ddd",
+//           borderRadius: "10px",
+//           padding: "20px",
+//           maxWidth: "500px",
+//         }}
+//       >
+//         <p>
+//           <strong>Idea:</strong>{" "}
+//           {response?.idea ? `✔ ${response.idea}` : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>Research:</strong>{" "}
+//           {response?.research ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>Product:</strong>{" "}
+//           {response?.product ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>Architecture:</strong>{" "}
+//           {response?.architecture ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>Engineering:</strong>{" "}
+//           {response?.code ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>QA:</strong>{" "}
+//           {response?.qa ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+
+//         <p>
+//           <strong>Deployment:</strong>{" "}
+//           {response?.deployment ? "✔ Completed" : "⏳ Waiting"}
+//         </p>
+//       </div>
+//     </main>
+//   );
+// } 
+
 "use client";
 
 import { useState } from "react";
 
-interface GenesisResponse {
+type Research = {
+  problem_summary: string;
+  target_users: string[];
+  competitors: string[];
+  market_gap: string;
+  mvp_features: string[];
+};
+
+type Product = {
+  product_name: string;
+  elevator_pitch: string;
+  target_users: string[];
+  core_features: string[];
+  tech_stack: string[];
+  success_metrics: string[];
+};
+
+type GenesisResponse = {
   idea: string;
-  research: unknown | null;
-  product: unknown | null;
-  architecture: unknown | null;
-  code: unknown | null;
-  qa: unknown | null;
-  deployment: unknown | null;
-}
+  research: Research;
+  product: Product;
+};
 
 export default function Home() {
   const [idea, setIdea] = useState("");
   const [response, setResponse] = useState<GenesisResponse | null>(null);
 
   async function generateIdea() {
-    try {
-      const res = await fetch("http://127.0.0.1:8000/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idea,
-        }),
-      });
+    const res = await fetch("http://127.0.0.1:8000/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idea,
+      }),
+    });
 
-      const data: GenesisResponse = await res.json();
-      setResponse(data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    const data = await res.json();
+    setResponse(data);
   }
 
   return (
-    <main style={{ padding: "40px", fontFamily: "Arial, sans-serif" }}>
-      <h1>Genesis AI</h1>
-
-      <input
-        value={idea}
-        onChange={(e) => setIdea(e.target.value)}
-        placeholder="Enter startup idea"
+    <main
+      style={{
+        maxWidth: "1000px",
+        margin: "40px auto",
+        padding: "20px",
+        fontFamily: "Inter, sans-serif",
+      }}
+    >
+      <h1
         style={{
-          padding: "10px",
-          width: "350px",
-          marginRight: "10px",
-        }}
-      />
-
-      <button
-        onClick={generateIdea}
-        style={{
-          padding: "10px 20px",
-          cursor: "pointer",
+          textAlign: "center",
+          fontSize: "42px",
+          marginBottom: "10px",
         }}
       >
-        Generate
-      </button>
+        Genesis AI
+      </h1>
 
-      <hr style={{ margin: "30px 0" }} />
-
-      <h2>Genesis AI Organization</h2>
+      <p
+        style={{
+          textAlign: "center",
+          color: "#666",
+          marginBottom: "35px",
+        }}
+      >
+        Multi-Agent Startup Builder
+      </p>
 
       <div
         style={{
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          padding: "20px",
-          maxWidth: "500px",
+          display: "flex",
+          gap: "10px",
+          marginBottom: "30px",
         }}
       >
-        <p>
-          <strong>Idea:</strong>{" "}
-          {response?.idea ? `✔ ${response.idea}` : "⏳ Waiting"}
-        </p>
+        <input
+          value={idea}
+          onChange={(e) => setIdea(e.target.value)}
+          placeholder="Enter your startup idea..."
+          style={{
+            flex: 1,
+            padding: "14px",
+            fontSize: "16px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+          }}
+        />
 
-        <p>
-          <strong>Research:</strong>{" "}
-          {response?.research ? "✔ Completed" : "⏳ Waiting"}
-        </p>
-
-        <p>
-          <strong>Product:</strong>{" "}
-          {response?.product ? "✔ Completed" : "⏳ Waiting"}
-        </p>
-
-        <p>
-          <strong>Architecture:</strong>{" "}
-          {response?.architecture ? "✔ Completed" : "⏳ Waiting"}
-        </p>
-
-        <p>
-          <strong>Engineering:</strong>{" "}
-          {response?.code ? "✔ Completed" : "⏳ Waiting"}
-        </p>
-
-        <p>
-          <strong>QA:</strong>{" "}
-          {response?.qa ? "✔ Completed" : "⏳ Waiting"}
-        </p>
-
-        <p>
-          <strong>Deployment:</strong>{" "}
-          {response?.deployment ? "✔ Completed" : "⏳ Waiting"}
-        </p>
+        <button
+          onClick={generateIdea}
+          style={{
+            padding: "14px 22px",
+            borderRadius: "8px",
+            border: "none",
+            cursor: "pointer",
+            background: "#111827",
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Generate
+        </button>
       </div>
+
+      {response && (
+        <>
+          {/* IDEA */}
+
+          <div
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "12px",
+              padding: "20px",
+              marginBottom: "25px",
+            }}
+          >
+            <h2>Idea</h2>
+            <p>{response.idea}</p>
+          </div>
+
+          {/* RESEARCH */}
+
+          <div
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "12px",
+              padding: "20px",
+              marginBottom: "25px",
+            }}
+          >
+            <h2>Research ✔</h2>
+
+            <p>
+              <strong>Problem Summary</strong>
+            </p>
+
+            <p>{response.research.problem_summary}</p>
+
+            <br />
+
+            <p>
+              <strong>Market Gap</strong>
+            </p>
+
+            <p>{response.research.market_gap}</p>
+
+            <br />
+
+            <p>
+              <strong>Target Users</strong>
+            </p>
+
+            <ul>
+              {response.research.target_users.map(
+                (user: string, index: number) => (
+                  <li key={index}>{user}</li>
+                )
+              )}
+            </ul>
+
+            <br />
+
+            <p>
+              <strong>Competitors</strong>
+            </p>
+
+            <ul>
+              {response.research.competitors.map(
+                (competitor: string, index: number) => (
+                  <li key={index}>{competitor}</li>
+                )
+              )}
+            </ul>
+
+            <br />
+
+            <p>
+              <strong>MVP Features</strong>
+            </p>
+
+            <ul>
+              {response.research.mvp_features.map(
+                (feature: string, index: number) => (
+                  <li key={index}>{feature}</li>
+                )
+              )}
+            </ul>
+          </div>
+
+          {/* PRODUCT */}
+
+          <div
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "12px",
+              padding: "20px",
+            }}
+          >
+            <h2>Product Manager ✔</h2>
+
+            <p>
+              <strong>Product Name</strong>
+            </p>
+
+            <p>{response.product.product_name}</p>
+
+            <br />
+
+            <p>
+              <strong>Elevator Pitch</strong>
+            </p>
+
+            <p>{response.product.elevator_pitch}</p>
+
+            <br />
+
+            <p>
+              <strong>Target Users</strong>
+            </p>
+
+            <ul>
+              {response.product.target_users.map(
+                (user: string, index: number) => (
+                  <li key={index}>{user}</li>
+                )
+              )}
+            </ul>
+
+            <br />
+
+            <p>
+              <strong>Core Features</strong>
+            </p>
+
+            <ul>
+              {response.product.core_features.map(
+                (feature: string, index: number) => (
+                  <li key={index}>{feature}</li>
+                )
+              )}
+            </ul>
+
+            <br />
+
+            <p>
+              <strong>Tech Stack</strong>
+            </p>
+
+            <ul>
+              {response.product.tech_stack.map(
+                (tech: string, index: number) => (
+                  <li key={index}>{tech}</li>
+                )
+              )}
+            </ul>
+
+            <br />
+
+            <p>
+              <strong>Success Metrics</strong>
+            </p>
+
+            <ul>
+              {response.product.success_metrics.map(
+                (metric: string, index: number) => (
+                  <li key={index}>{metric}</li>
+                )
+              )}
+            </ul>
+          </div>
+        </>
+      )}
     </main>
   );
 }
